@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class UtilityService {
+	
 	public String formatString(String input) {
 		if (input == null || input.isEmpty()) {
 			return "khong the format";

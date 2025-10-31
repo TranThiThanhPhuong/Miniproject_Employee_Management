@@ -3,13 +3,16 @@ package com.example.employeemanagement.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.employeemanagement.service.UtilityService;
 
 @RestController
+@RequestMapping("/api")
 public class HelloController {
+	
 	private final UtilityService utilityService;
 
 	@Autowired
@@ -33,12 +36,12 @@ public class HelloController {
 	}
 
 	@GetMapping("/format")
-	public String format(@RequestParam String name) {
+	public String formatString(@RequestParam String name) {
 		return utilityService.formatString(name);
 	}
 
 	@GetMapping("/code")
-	public String generateCode() {
+	public String createIdEmployee() {
 		return utilityService.createIdEmployee();
 	}
 }
