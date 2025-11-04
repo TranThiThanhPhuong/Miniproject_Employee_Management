@@ -1,20 +1,34 @@
 package com.example.employeemanagement.model;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "employee")
 public class Employee {
 	
-	private int id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+	
 	private String name;
 	
-	public Employee (int id, String name) {
+	private String email;
+	
+	@ManyToOne
+	@JoinColumn(name = "department_id")
+	private Department department;
+	
+	public Employee (Long id, String name, String email) {
 		this.id = id;
 		this.name = name;
+		this.email = email;
 	}
 	
-	public int getId() { 
+	public Long getId() { 
 		return id; 
 	}
 	
-    public void setId(int id) { 
+    public void setId(Long id) { 
     	this.id = id; 
     }
 
@@ -24,5 +38,21 @@ public class Employee {
     
     public void setName(String name) { 
     	this.name = name; 
+    }
+    
+    public String getEmail() { 
+    	return email; 
+    }
+    
+    public void setEmail(String email) { 
+    	this.email = email; 
+    }
+    
+    public Department getDepartment() { 
+    	return this.department; 
+    }
+    
+    public void setDepartment(Department department) { 
+    	this.department = department; 
     }
 }

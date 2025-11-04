@@ -15,7 +15,7 @@ public class UtilityService {
 	}
 	
 	public String createIdEmployee() {
-		int number = new Random().nextInt(900) + 100;
+		Long number = new Random().nextLong(900) + 100;
 		return "Employee code " + number;
 	}
 }
