@@ -14,37 +14,45 @@ import com.example.employeemanagement.repository.EmployeeRepository;
 @Service
 public class EmployeeService {
 	
-	private final List<Employee> employees = new ArrayList<>();
-	
 	@Autowired
 	private DepartmentRepository departmentRepo;
 	
 	private final EmployeeRepository employeeRepo;
 	
 	public EmployeeService (EmployeeRepository employeeRepo) {
-		
 		this.employeeRepo = employeeRepo;
-		
-		employees.add(new Employee(1L, "Phuong", "p@gmail.com"));
-		employees.add(new Employee(2L, "Tram", "t@gmail.com"));
 	}
 	
 	public List<Employee> getAllEmployees() {
-		return employees;
+		return employeeRepo.findAll();
 	}
 	
 	public Employee addEmployee (Employee employee) {
-		employees.add(employee);
-		return employee;
+		return employeeRepo.save(employee);
 	}
 	
 	public List<Employee> searchByName(String name) {
-		return employeeRepo.findByNameContainIgoreCase(name);
+		return employeeRepo.findByNameContainingIgnoreCase(name);
 	}
 	
 	public List<Employee> searchByDepartment(Long department_id) {
 		Department department = departmentRepo.findById(department_id).orElse(null);
 		return department != null ? employeeRepo.findByDepartment(department) : List.of();
+	}
+	
+	public Employee updateEmployee(Long id, Employee updatedEmployee) {
+	    Employee existing = employeeRepo.findById(id).orElse(null);
+	    if (existing != null) {
+	        existing.setName(updatedEmployee.getName());
+	        existing.setEmail(updatedEmployee.getEmail());
+	        existing.setDepartment(updatedEmployee.getDepartment());
+	        return employeeRepo.save(existing);
+	    }
+	    return null;
+	}
+
+	public void deleteEmployee(Long id) {
+	    employeeRepo.deleteById(id);
 	}
 }
 

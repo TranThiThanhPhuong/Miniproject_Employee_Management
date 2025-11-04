@@ -9,7 +9,7 @@ import com.example.employeemanagement.model.Employee;
 
 public interface EmployeeRepository extends JpaRepository<Employee, Long>{
 	
-	List<Employee> findByNameContainIgoreCase (String name);
+	List<Employee> findByNameContainingIgnoreCase (String name);
 	
 	List<Employee> findByDepartment (Department department);
 	
