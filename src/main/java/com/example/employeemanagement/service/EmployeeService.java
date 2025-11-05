@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.employeemanagement.exception.ResourceNotFoundException;
 import com.example.employeemanagement.model.Department;
 import com.example.employeemanagement.model.Employee;
 import com.example.employeemanagement.repository.DepartmentRepository;
@@ -25,6 +26,11 @@ public class EmployeeService {
 	
 	public List<Employee> getAllEmployees() {
 		return employeeRepo.findAll();
+	}
+	
+	public Employee getEmployeeById(Long id) {
+		return employeeRepo.findById(id)
+			.orElseThrow(() -> new ResourceNotFoundException("Khong tim thay Id:" + id));
 	}
 	
 	public Employee addEmployee (Employee employee) {
