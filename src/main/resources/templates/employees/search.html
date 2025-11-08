@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"/></head>
+<body>
+<h1>Tìm kiếm nhân viên</h1>
+<form th:action="@{/employees/search}" method="get">
+  <input type="text" name="name" placeholder="Tìm theo tên"/>
+  <select name="departmentId">
+    <option value="">--Chọn phòng ban--</option>
+    <option th:each="d: ${departments}" th:value="${d.id}" th:text="${d.name}"></option>
+  </select>
+  <button type="submit">Search</button>
+</form>
+
+<div th:if="${results}">
+  <h2>Kết quả</h2>
+  <ul>
+    <li th:each="r: ${results}" th:text="|${r.name} - ${r.email}|"></li>
+  </ul>
+</div>
+<div>
+	<a th:href="@{/employees/list}">Cancle</a>
+</div>
+</body>
+</html>

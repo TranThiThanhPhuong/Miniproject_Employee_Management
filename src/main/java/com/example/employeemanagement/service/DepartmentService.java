@@ -4,13 +4,14 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.example.employeemanagement.exception.ResourceNotFoundException;
 import com.example.employeemanagement.model.Department;
 import com.example.employeemanagement.repository.DepartmentRepository;
 
 @Service
 public class DepartmentService {
 	
-	private DepartmentRepository departmentRepo;
+	private final DepartmentRepository departmentRepo;
 	
 	public DepartmentService (DepartmentRepository departmentRepo) {
 		this.departmentRepo = departmentRepo;
@@ -25,18 +26,18 @@ public class DepartmentService {
 	}
 	
 	public Department getDepartmentById(Long id) {
-        return departmentRepo.findById(id).orElse(null);
+        return departmentRepo.findById(id)
+        		.orElseThrow(()-> new ResourceNotFoundException("Không tìm thầy phòng ban:" + id));
     }
 
     public Department updateDepartment(Long id, Department departmentDetails) {
-        Department existing = departmentRepo.findById(id).orElse(null);
-        if (existing == null) return null;
-
+        Department existing = getDepartmentById(id);
         existing.setName(departmentDetails.getName());
         return departmentRepo.save(existing);
     }
 
     public void deleteDepartment(Long id) {
-        departmentRepo.deleteById(id);
+    	Department dp = getDepartmentById(id);
+        departmentRepo.delete(dp);
     }
 }

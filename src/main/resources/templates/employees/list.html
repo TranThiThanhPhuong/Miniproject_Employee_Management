@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Danh sách nhân viên</title>
+</head>
+<body>
+<h1>Danh sách nhân viên</h1>
+
+<div th:if="${successMessage}">
+  <p th:text="${successMessage}"></p>
+</div>
+
+<table border="1">
+  <thead>
+    <tr><th>ID</th><th>Name</th><th>Email</th><th>Department</th><th>Actions</th></tr>
+  </thead>
+  <tbody>
+    <tr th:each="emp : ${employees}">
+      <td th:text="${emp.id}"></td>
+      <td th:text="${emp.name}"></td>
+      <td th:text="${emp.email}"></td>
+      <td th:text="${emp.department != null ? emp.department.name : '-'}"></td>
+      <td>
+        <a th:href="@{'/employees/edit/' + ${emp.id}}">Edit</a>
+        <form th:action="@{'/employees/delete/' + ${emp.id}}" method="post" style="display:inline">
+          <input type="submit" value="Delete"/>
+        </form>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<nav>
+  <a th:href="@{/employees/list}">Employees</a> |
+  <a th:href="@{/employees/add}">Add Employee</a> |
+  <a th:href="@{/employees/search}">Search</a>
+</nav>
+</body>
+</html>

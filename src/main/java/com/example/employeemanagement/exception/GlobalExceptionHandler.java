@@ -20,7 +20,6 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
 	}
 
-	// Xử lý lỗi validation
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ResponseEntity<?> handleValidation(MethodArgumentNotValidException ex) {
 		List<String> errors = ex.getBindingResult().getFieldErrors().stream()
@@ -34,7 +33,6 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
 	}
 
-	// Xử lý lỗi chung
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<?> handleGeneral(Exception ex) {
 		Map<String, Object> body = new HashMap<>();
@@ -45,3 +43,6 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<>(body, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 }
+
+// @ControllerAdvice: bắt toàn bộ lỗi trên toàn hệ thống.
+// @ExceptionHandler: định nghĩa cách xử lý từng loại lỗi.

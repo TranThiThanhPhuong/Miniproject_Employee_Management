@@ -25,11 +25,11 @@ import jakarta.validation.Valid;
 public class EmployeeController {
 
 	@Autowired
-	private EmployeeService employeeservice;
+	private EmployeeService employeeService;
 
 	@GetMapping
 	public ResponseEntity<List<Employee>> getAllEmployees() {
-		List<Employee> employees = employeeservice.getAllEmployees();
+		List<Employee> employees = employeeService.getAllEmployees();
 		return ResponseEntity.ok(employees);
 	}
 
@@ -43,38 +43,42 @@ public class EmployeeController {
 			return ResponseEntity.badRequest().body(errors);
 		}
 
-		Employee saved = employeeservice.addEmployee(newEmployee);
+		Employee saved = employeeService.addEmployee(newEmployee);
 		return ResponseEntity.status(200).body(saved);
 	}
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<Employee> getEmployeeById(@PathVariable Long id) {
-	    Employee employee = employeeservice.getEmployeeById(id);
+	    Employee employee = employeeService.getEmployeeById(id);
 	    return ResponseEntity.ok(employee);
 	}
 
 	@GetMapping("/search")
 	public List<Employee> searchByName(@RequestParam String name) {
-		return employeeservice.searchByName(name);
+		return employeeService.searchByName(name);
 	}
 
-	@GetMapping("/department/{department_id}")
+	@GetMapping("/search/department/{department_id}")
 	public List<Employee> searchByDepartment(@PathVariable Long department_id) {
-		return employeeservice.searchByDepartment(department_id);
+		return employeeService.searchByDepartment(department_id);
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<Employee> updateEmployee(@PathVariable Long id, @RequestBody Employee updatedEmployee) {
-		Employee updated = employeeservice.updateEmployee(id, updatedEmployee);
-		if (updated != null) {
-			return ResponseEntity.ok(updated);
+	public ResponseEntity<?> updateEmployee(@PathVariable Long id, @Valid @RequestBody Employee updatedEmployee, BindingResult result) {
+		if (result.hasErrors()) {
+			List<String> errors = result.getFieldErrors()
+					.stream()
+					.map(err -> err.getField() + ": " + err.getDefaultMessage())
+					.toList();
+			return ResponseEntity.badRequest().body(errors);
 		}
-		return ResponseEntity.notFound().build();
+		Employee updated = employeeService.updateEmployee(id, updatedEmployee);
+		return ResponseEntity.ok(updated);
 	}
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deleteEmployee(@PathVariable Long id) {
-		employeeservice.deleteEmployee(id);
+		employeeService.deleteEmployee(id);
 		return ResponseEntity.noContent().build();
 	}
 }

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title th:insert="${title}">Employee Management</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<nav th:fragment="header">
+  <a th:href="@{/employees/list}">Employees</a> |
+  <a th:href="@{/employees/add}">Add Employee</a> |
+  <a th:href="@{/employees/search}">Search</a>
+</nav>
+<hr/>
+</body>
+</html>
