@@ -30,6 +30,17 @@ public class EmployeeWebController {
         return "employees/list";
     }
     
+    @GetMapping("/{id}")
+    public String getEmployeeById(@PathVariable Long id, Model model) {
+        model.addAttribute("employee", employeeService.getEmployeeById(id));
+        return "employees/employee-detail";
+    }
+    
+    @GetMapping("/count")
+    public long getEmployeeByCount() {
+        return employeeService.getEmployeeCount();
+    }
+    
     @GetMapping("/add")
     public String showAddForm(Model model) {
         model.addAttribute("employee", new Employee());

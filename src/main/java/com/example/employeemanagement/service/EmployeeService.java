@@ -2,6 +2,8 @@ package com.example.employeemanagement.service;
 
 import java.util.List;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.example.employeemanagement.exception.ResourceNotFoundException;
@@ -29,9 +31,18 @@ public class EmployeeService {
 		return employeeRepo.findAll();
 	}
 	
+	@Cacheable(value = "employees")
 	public Employee getEmployeeById(Long id) {
+		log.info("Không lấy từ cache -> truy vấn DB");
 		return employeeRepo.findById(id)
 			.orElseThrow(() -> new ResourceNotFoundException("Khong tim thay Id:" + id));
+	}
+	
+	@Cacheable(value = "employeesCount")
+	public long getEmployeeCount() {
+		long count = employeeRepo.count();
+		log.info("Đếm số lượng nhân viên từ DB: {} ", count);
+		return count;
 	}
 	
 	public Employee addEmployee (Employee employee) {
@@ -57,6 +68,7 @@ public class EmployeeService {
 		return department != null ? employeeRepo.findByDepartment(department) : List.of();
 	}
 	
+	@CacheEvict(value = "employees", key = "#id")
 	public Employee updateEmployee(Long id, Employee updatedEmployee) {
 	    Employee existing = employeeRepo.findById(id)
 	    		.orElseThrow(()-> new ResourceNotFoundException("Không tìm thấy nhân viên: "+ id));
@@ -66,6 +78,7 @@ public class EmployeeService {
 	        existing.setDepartment(updatedEmployee.getDepartment());
 	        Employee saved = employeeRepo.save(existing);
 	        log.info("Cập nhật nhân viên: id={}, name={}, email={}", saved.getId(), saved.getName(), saved.getEmail());
+	        log.info("Xóa cache");
 	        return saved;
 	    }
 	    catch (Exception ex) {
@@ -74,11 +87,13 @@ public class EmployeeService {
 	    }
 	}
 
+	@CacheEvict(value = "employees", key = "#id")
 	public void deleteEmployee(Long id) {
 		Employee existing = employeeRepo.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy nhân viên ID: " + id));
         employeeRepo.delete(existing);
         log.info("Xóa nhân viên: id={}, name={}", existing.getId(), existing.getName());
+        log.info("Xóa cache");
 	}
 	
 	public void resolveAndSetDepartment(Employee employee) {
@@ -98,3 +113,6 @@ public class EmployeeService {
 //Bạn không cần dùng @Autowired nữa, vì Spring Boot 3+ tự inject nếu chỉ có 1 constructor duy nhất.
 
 // module 7 : Trước khi save/update, ta resolveAndSetDepartment() để lấy Department thật từ DB (tránh detached entity issues).
+
+//@Cacheable → nếu dữ liệu tồn tại trong cache → trả về cache, không truy DB
+//@CacheEvict → xóa cache khi delete hoặc update để tránh dữ liệu cũ

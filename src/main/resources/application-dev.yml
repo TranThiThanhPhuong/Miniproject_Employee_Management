@@ -19,4 +19,17 @@ spring:
   mvc:
     view:
       prefix: /templates/
-      suffix: .html
+      suffix: .html		
+  cache:
+    type: caffeine
+    caffeine:
+      spec: maximumSize=100,expireAfterWrite=1m
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
