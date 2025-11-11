@@ -25,6 +25,11 @@ spring:
     caffeine:
       spec: maximumSize=100,expireAfterWrite=1m
 
+app:
+  jwt:
+    secret: "thay_ban_biet_mat_khoa_dai_it_cho_bao_mat"  # ít nhất 32 bytes
+    expiration: 3600000  # 1 hour in ms
+
 management:
   endpoints:
     web:
