@@ -1,6 +1,8 @@
 package com.example.employeemanagement.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -80,5 +82,13 @@ public class EmployeeController {
 	public ResponseEntity<Void> deleteEmployee(@PathVariable Long id) {
 		employeeService.deleteEmployee(id);
 		return ResponseEntity.noContent().build();
+	}
+	
+	@GetMapping("/statistics")
+	public ResponseEntity<Map<String, Object>> getEmployeeStatistics() {
+	    Map<String, Object> result = new HashMap<>();
+	    result.put("byDepartment", employeeService.getEmployeeStatsByDepartment());
+	    result.put("total", employeeService.getTotalEmployeeCount());
+	    return ResponseEntity.ok(result);
 	}
 }

@@ -6,6 +6,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import com.example.employeemanagement.dto.DepartmentStatsDTO;
 import com.example.employeemanagement.exception.ResourceNotFoundException;
 import com.example.employeemanagement.model.Department;
 import com.example.employeemanagement.model.Employee;
@@ -104,6 +105,14 @@ public class EmployeeService {
         } else {
             employee.setDepartment(null);
         }
+	}
+	
+	public List<DepartmentStatsDTO> getEmployeeStatsByDepartment() {
+	    return employeeRepo.countEmployeesByDepartment();
+	}
+
+	public long getTotalEmployeeCount() {
+	    return employeeRepo.countAllEmployees();
 	}
 }
 
